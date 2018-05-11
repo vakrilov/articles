@@ -7,7 +7,7 @@ One of the most significant changes introduced in `NativeScript 4.0` is the way 
 
 > TLTR: Old NativeScript can't share content between pages - more memory required, more CPU usage and slower performance
 
-In previous versions of NativeScript we would always create a Page and place the content of the app in there. Then when the app would navigate to another view, NativeScript would create another Page and swap it in for the old one.
+In preovious versions of NativeScript we would always have a single Frame in the root of the app (Note: The Frame is the element responsible for navigation. It hosts the pages when navgiating to them). Because this Frame is the root of the app, it is **always** full screen and so are all the Pages loaded inside it.
 
 At first, this doesn't sound like a big deal. I am on page A, so the main Frame contains A, then I navigate to page B, and now the main Frame contains B. 
 The problem starts when you need to add a SideDrawer (or a TabView) for Navigation. Since each time the app navigates, all of its content gets replaced, that means that we have to add a side drawer to each page. As a result the app creates a new instance of the side drawer every time it navigates, meaning more RAM used, more CPU cycles spent and slower performance.
@@ -16,6 +16,11 @@ The problem starts when you need to add a SideDrawer (or a TabView) for Navigati
 
 > TLTR: NativeScript 4.0 can share content between pages - no RAM or CPU cycles waste and better performance
 
+OK, that was oversimplified and not entirely correct. In the NativeScript 4.0 you have control on which element should be the root of the app and where (and if) to put a Frame which will host your Pages. So now you can set the SideDrawer as the application root and put the Frame **inside** its main content. This effectively means that the Frame will swap different Pages inside the **same** SideDrawer instance (effectivly reusing it).
+
+The fun does not end here. Lets focus on the TabView example. Prevoiusly, if you wanted to navigate deep inside one of the tabs - you hade to create a similar page (with the whoe TabView definition inisde it) and navigate to it (this is because each navigation was swaping the whole screen content). Now, you can have a much simpler approach - have the TabView as a root and place a Frame **inside** the tab conetn. When you navigate pages inside this Freame everything outside it will remain the same.
+
+<!-- Alex: I think you don't need the rest of this section -->
 !!!!!!!!!!!In `NativeScript 4.0` the FrameView hosts navigation and pages
 
 !!! Need a good explanation from Alex
